@@ -1,29 +1,35 @@
-#Data Visualization - 11 de Mayo de 2018
+#Data Visualization - 18 de Septiembre de 2019
 library(tidyverse)
 
-#tidyverse 1.2.1 ──
-#✔ ggplot2 2.2.1     ✔ purrr   0.2.4
-#✔ tibble  1.4.2     ✔ dplyr   0.7.4
-#✔ tidyr   0.8.0     ✔ stringr 1.3.1
-#✔ readr   1.1.1     ✔ forcats 0.3.0
+#── Attaching packages ───────── tidyverse 1.2.1 ──
+#✔ ggplot2 3.2.1     ✔ purrr   0.3.2
+#✔ tibble  2.1.3     ✔ dplyr   0.8.3
+#✔ tidyr   1.0.0     ✔ stringr 1.4.0
+#✔ readr   1.3.1     ✔ forcats 0.4.0
 
-#Los coches con motor más grande consumen más combustible 
-#que los coches con motor más pequeño.
+#Los coches con motor más grande consumen más combustible que los coches con motor más pequeño.
 #La relación consumo / tamaño es lineal? Es no lineal? Es exponencial?
 #Es positiva? Es negativa?
 
 View(mpg)
 ?mpg #help(mpg)
 # displ: tamaño del motor del coche en litros
-# hwy: número de millas recorridas en autopista por galón de combustible (3.785411784 litros)
+# hwy: número de millas recorridas en autopista por galón de combustible (1 Galón=3.785411784 litros)
 
-ggplot(data = mpg)
+ggplot(data = mpg) #le indicamos a ggplot el data que vamos a usar
 
 mpg %>% ggplot()
 
+#creamos una primera 'capa' que dibuja data=mpg(el fondo gris), y a esta le indicamos el tipo
+#de representación que vamos a ver(los puntos negros)
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) #aes=aestetic
 
 ggplot(data = mpg) + 
-  geom_point(mapping = aes(x = displ, y = hwy))
+  geom_point(mapping = aes(x = cyl, y = hwy))
+
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x =cyl , y = cty))
 
 #PLANTILLA PARA HACER UNA REPRESENTACIÓN GRÁFICA CON GGPLOT
 #ggplot(data = <DATA_FRAME>) +
@@ -34,7 +40,7 @@ ggplot(data = mpg) +
 
 
 
-#Color de los puntos
+#Color de los puntos definidos por tipo de coche(class)
 ggplot(data = mpg) +
   geom_point(mapping = aes(x = displ, y = hwy, color = class))
 
@@ -60,6 +66,7 @@ ggplot(data = mpg) +
 # 15- 20: son formas rellenas de color, por tanto se le puede cambiar el color
 # 21 - 25: son formas con borde y relleno, y se les puede cambiar el color (borde) y el fill (relleno)
 
+#chuleta para las formas(código sacado de ggplot en google)
 d=data.frame(p=c(0:25))
 ggplot() +
   scale_y_continuous(name="") +
@@ -68,7 +75,8 @@ ggplot() +
   geom_point(data=d, mapping=aes(x=p%%16, y=p%/%16, shape=p), size=5, fill="yellow") +
   geom_text(data=d, mapping=aes(x=p%%16, y=p%/%16+0.25, label=p), size=3)
 
-
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy), color = "yellow")
 
 ggplot(data = mpg) + 
   geom_point(mapping = aes(x = displ, y = hwy), 
