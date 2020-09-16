@@ -21,6 +21,8 @@ library(tidyverse)
 ggplot(data = diamonds) + 
   geom_bar(mapping = aes(x=cut))
 
+?diamonds
+
 diamonds %>%
   count(cut)
 
@@ -111,6 +113,12 @@ nycflights13::flights %>%
 
 
 #Ejercicio 1
+#Explora la distribución de las variables x, y, z del dataset 
+#de diamonds. ¿Qué podemos inferir?
+#Busca un diamante (por internet por ejemplo) y decide qué 
+#dimensiones pueden ser aceptables para las medidas de longitud, 
+#altura y anchura de un diamante.
+
 ggplot(diamonds) + 
   geom_histogram(mapping = aes(x = x), binwidth = 0.5) +
   coord_cartesian(ylim = c(0,100))
@@ -124,12 +132,20 @@ ggplot(diamonds) +
   coord_cartesian(ylim = c(0,100))
 
 # Ejercicio 2
+#Explora la distribución del precio (price) del dataset de diamonds. 
+#¿Hay algo que te llame la atención o resulte un poco extraño?
+#Recuerda hacer uso del parámetro binwidth para probar un rango 
+#dispar de valores hasta ver algo que te llame la atención.
+
 ggplot(diamonds) + 
   geom_histogram(mapping = aes(x = price), binwidth = 10) +
   coord_cartesian(xlim = c(1400,1600))
 
 # Ejercicio 3
-ggplot(diamonds) + 
+#¿Cuantos diamantes hay de 0.99 kilates? ¿Y de exactamente 1 kilate?
+#¿A qué puede ser debida esta diferencia?
+
+  ggplot(diamonds) + 
   geom_histogram(mapping = aes(x = carat), binwidth = 0.01)+
   coord_cartesian(xlim = c(0.95,1.05))
 
@@ -138,11 +154,20 @@ diamonds %>%
   count(cut_width(carat, 0.01))
 
 # Ejercicio 4
+#Compara y contrasta el uso de las funciones coord_cartesian() 
+#frente xlim() y ylim() para hacer zoom en un histograma.
+#¿Qué ocurre si dejamos el parámetro binwidth sin configurar?
+#¿Qué ocurre si hacemos zoom y solamente se ve media barra?
+
 ggplot(diamonds) + 
   geom_histogram(mapping = aes(x = carat), binwidth = 0.01)+
   coord_cartesian(xlim = c(0.95,1.05))
 
-# Ejercicio 4
+# Ejercicio 5
+#¿Qué ocurre cuando hay NAs en un histograma? 
+#¿Qué ocurre cuando hay NAs en un diagrama de barras?
+#¿Qué diferencias observas?
+
 na_diamonds <-good_diamonds %>%
   mutate(cut2 = ifelse(cut == "Fair", NA, cut))
 
@@ -261,6 +286,12 @@ ggplot(data = diamonds_pred) +
 
 
 #Ejercicio 1
+#Es hora de aplicar todo lo que hemos aprendido para visualizar mejor 
+#los tiempos de salida para vuelos cancelados vs los no cancelados. 
+#Recuerda bien qué tipo de dato tenemos en cada caso. ¿Qué deduces acerca 
+#de los retrasos según la hora del día a la que está programada el vuelo 
+#de salida?
+
 nycflights13::flights %>%
   mutate(
     cancelled = is.na(dep_time),
@@ -273,6 +304,9 @@ nycflights13::flights %>%
 
 
 #Ejercicio 3
+#Instala el paquete de ggstance y úsalo para crear un boxplot horizontal. 
+#Compara el resultado con usar el coord_flip() que hemos visto en clase.
+
 install.packages("ggstance")
 library(ggstance)
 
@@ -285,6 +319,16 @@ ggplot(data = mpg,mapping = aes(x = hwy,
 
 
 #Ejercicio 4
+#Los boxplots nacen en una época donde los datasets eran mucho más 
+#pequeños y la palabra big data no era más que un concepto futurista. 
+#De ahí que los datos considerados con outliers tuvieran sentido que 
+#fueran representados con puntos dado que su existencia era más bien 
+#escasa o nula. Para solucionar este problema, existe el letter value 
+#plot del paquete lvplot. Instala dicho paquete y usa la geometría 
+#geom_lv() para mostrar la distribución de precio vs cut de 
+#los diamantes. ¿Qué observas y qué puedes interpretar a raíz de 
+#dicho gráfico?
+  
 install.packages("lvplot")
 library(lvplot)
 
@@ -298,6 +342,11 @@ ggplot(data = diamonds,
 
 
 #Ejercicio 5
+#Compara el uso de la geometría geom_violin() con un facet 
+#de geom_histogram() y contra un geom_freqpoly() coloreado. 
+#Investiga cuales son los pros y los contras de cada uno de 
+#los tipos de representación.
+
 ggplot(diamonds, mapping = aes(x = cut, y = price)) + 
   geom_violin()
 
@@ -310,6 +359,14 @@ ggplot(diamonds) +
 
 
 #Ejercicio 6
+#Si tenemos datasets pequeños, a veces es útil usar la opción que ya 
+#conocemos de geom_jitter() para ver la relación entre una variable 
+#contínua y una variable categórica. El paquete de R ggbeeswarm tiene 
+#un par de métodos similares a geom_jitter() que te pueden ayudar a 
+#tal efecto. Listalos y haz un gráfico con cada uno de ellos para ver 
+#qué descripción de los datos podemos extraer de cada uno. ¿A qué 
+#gráfico de los que ya has visto durante esta práctica se parece?
+  
 install.packages("ggbeeswarm")
 library(ggbeeswarm)
 
@@ -317,6 +374,13 @@ ggplot(diamonds,aes(cut, price)) +
   geom_quasirandom()
 
 #Ejercicio 7 
+#Los mapas de calor que hemos visto tienen un claro problema de elección 
+#de los colores. 
+#¿Cómo podríamos reescalar el campo count dataset de diamantes cuando 
+#cruzamos color y cut para observar mejor la distribución de dicho cruce?
+#¿Por qué resulta mejor usar la estética aes(x = color, y = cut) en lugar 
+#de aes(x=cut, y = color)?
+  
 diamonds %>%
   count(color, cut) %>%
   ggplot(mapping = aes(x = cut, y = color)) + 
@@ -328,12 +392,23 @@ diamonds %>%
   geom_tile(mapping = aes(fill = log(n)))
 
 #Ejercicio 8
-nycflights13::flights %>%
+#Utiliza la geom_tile() junto con dplyr para explorar si el promedio 
+#del retraso de los vuelos varía con respecto al destino y mes del año. 
+#¿Qué hace que este gráfico sea dificil de leer o de interpretar?
+#¿Cómo puedes mejorar la visualización?
+
+  nycflights13::flights %>%
   count(month, dest) %>%
   ggplot(mapping = aes(x = dest, y = month)) + 
   geom_tile(mapping = aes(fill = n))
 
 #Ejercicio 9
+#En lugar de hacer un resumen de la distribución condicional de dos 
+#variables numéricas con un boxplot, se puede usar un polígono de frecuencias. 
+#¿Qué hay que tener en cuenta cuando usas cut_width() o cuando usas cut_number()?
+#¿Cómo influye este hecho en la visualización 2D de carat y price
+#Da la mejor visualización posible de carat dividido por price.
+
 ggplot(diamonds, aes(price, colour = cut_width(carat, 1.0))) +
   geom_freqpoly()
 
@@ -344,6 +419,10 @@ ggplot(diamonds, aes(carat, colour = cut_width(price, 5000))) +
   geom_freqpoly()
 
 #Ejercicio 10
+#Compara la distribución del precio de los diamantes grandes vs diamantes 
+#pequeños. Elige el concepto de grande y pequeño que consideres. 
+#Comenta el resultado.
+
 diamonds %>%
   filter(between(x,2,20)) %>%
   filter(between(y,2,20)) %>%
@@ -352,6 +431,9 @@ diamonds %>%
    geom_bin2d()
 
 #Ejercicio 11
+#Combina diferentes técnicas de ggplot para visulaizar la distribución 
+#combinada de cut, carat y precio.
+
 diamonds %>%
   ggplot(aes(price, colour = cut)) + 
   geom_freqpoly() + 
@@ -363,6 +445,16 @@ diamonds %>%
   facet_wrap(cut~cut_number(carat, 5))
 
 #Ejercicio 12
+#Los plots en 2D pueden revelar outliers que no se ven en plots de una 
+#sola dimensión. Por ejemplo, algunos puntos del plot dado por
+# ggplot(data = diamonds) + 
+#  geom_point(mapping = aes(x = x, y = y)) + 
+#    coord_cartesian(xlim = c(4,12), ylim = c(4,12))
+#hacen destacar muchísimo los outliers combinando x con y, a pesar de 
+#que por separado parecen valores normales. 
+#Intenta averiguar porqué un scatterplot resulta más efectivo en este 
+#caso que un gráfico con agrupaciones.
+
 ggplot(data = diamonds) + 
   geom_point(mapping = aes(x = x, y = y)) + 
   coord_cartesian(xlim = c(4,12), ylim = c(4,12))

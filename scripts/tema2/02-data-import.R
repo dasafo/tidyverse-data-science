@@ -5,7 +5,7 @@ library(tidyverse)
 # * read_tsv() '\t'
 # * read_delim(delim = '\n')
 
-# * read_fwf()
+# * read_fwf() [fixed width file]
   # * fwf_widths()
   # * fwf_positions()
 # * read_table()
@@ -43,6 +43,15 @@ read_csv("1,2,3\n4,5,6\n7,8,9", col_names = c("primera","segunda", "tercera"))
 read_csv("x,y,z\n1,2,.\n4,#,6", na = c(".", "#"))
 
 #Ejercicio 4
+#A veces un csv contiene necesariamente comas en los campos que son strings. 
+#Para evitar problemas en la carga, suelen ir rodeadas de comillas dobles " 
+#o de comillas simples '. La convención de read_csv() es que asume que 
+#cualquier caracter vendrá rodeado por comillas dobles " y si lo queremos 
+#cambiar tenemos que usar la función read_delim(). 
+#Indica qué argumentos tendríamos que especificar para poder leer el 
+#texto del siguiente data frame correctamente
+# "x,y\n1,'a,b'"
+
 data <- "x,y\n1,'a,b'"
 read_delim(data, ",", quote = "'")
 
@@ -101,8 +110,8 @@ parse_factor(c("May","Apr","Jul","Aug", "Sec","Nob"), levels = months)
 # parse_date()
 # parse_time()
 # EPOCH -> 1970-01-01 00:00
-parse_datetime("2018-06-05T1845")
-parse_datetime("20180605")
+parse_datetime("2020-09-14T1925")
+parse_datetime("20200914")
 
 parse_date("2015-12-07")
 parse_date("2017/05/18")
@@ -147,10 +156,27 @@ parse_date("3 Septiembre 2014", format = "%d %B %Y", locale = locale("es"))
 
 
 # Ejercicio 2
+#Investiga qué ocurre si intentamos configurar a la vez el decimal_mark y 
+#grouping_mark con el mismo carácter. 
+#¿Qué valor por defecto toma el grouping_mark cuando configuramos el 
+#decimal_mark al carácter de coma “,”? 
+#¿Qué valor por defecto toma el decimal_mark cuando configuramos el 
+#grouping_mark al carácter de punto “.”? 
+
 parse_number("1.000.000,0", locale = locale(grouping_mark = ".", decimal_mark = "."))
 
 
 #Ejercicio 7
+#Genera el formato correcto de string que procesa cada una de 
+#las siguientes fechas y horas:
+# v1 <- "May 19, 2018"
+# v2 <- "2018-May-08"
+# v3 <- "09-Jul-2013"
+# v4 <- c("January 19 (2019)", "Mayo 1 (2015)")
+# v5 <- "12/31/18" # Dic 31, 2014
+# v6 <- "1305"
+# v7 <- "12:05:11.15 PM"
+
 v1 <- "May 19, 2018"
 parse_date(v1, "%b %d, %Y")
 

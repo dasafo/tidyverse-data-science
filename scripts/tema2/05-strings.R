@@ -66,7 +66,7 @@ library(htmlwidgets)
 x <- c("manzana", "banana", "pera", "pomelo")
 str_view(x, "an")
 
-#. -> cualquier caracter (pero solo uno)
+#. -> cualquier caracter (pero solo uno y la primera de la palabra que sale)
 str_view(x, ".a.")
 
 #\. -> localizar un punto
@@ -97,7 +97,7 @@ summarise()
 #[abc] -> localizar la a, la b o la c indistintamente
 #[^abc] -> localizar cualquier cosa excepto la a, b o c
 
-#abc|d..m, abc|xyz
+#abc|d..m, abc|xyz #busca abc ó bien d+(dos letras cualesquiera)+m
 str_view(c("grey", "gray"), "gr(e|a)y")
 
 #? -> 0 o 1
@@ -105,7 +105,7 @@ str_view(c("grey", "gray"), "gr(e|a)y")
 #* -> 0 o más veces
 
 x <- "El año 1888 es el más largo en números romanos: MDCCCLXXXVIII"
-str_view(x, "CC?")
+str_view(x, "CC?") #busca 2 C, o bien 0 veces o 1 vez 
 str_view(x, "CC+")
 str_view(x, "C[LX]+")
 
@@ -118,22 +118,25 @@ str_view(x, "C[LX]+")
 #{n,m} -> entre n y m repeticiones
 str_view(x, "C{2}")
 str_view(x, "C{2,}")
-str_view(x, "C{2,3}?")
+str_view(x, "C{2,3}?") #el mas corto posible entre 2 y 3 (que será 2 Cs)
 str_view(x, "C[LX]+?")
 
 fruits = c("banana", "coco", "papaya", "manzana", "pera", "pepino")
 str_view(fruit, "(..)\\1", match = TRUE)
+str_view("abc-abc", "(...)-\\1")
+str_view("abc-abc-", "(...)(-)\\1\\2")
 str_view("abc-def-", "(...)(-)\\1\\2")
 
 # Otras herramientas
 str_detect(fruits, "a")
 
-sum(str_detect(words, "^j"))
-mean(str_detect(words, "^[aeiou]"))
-mean(str_detect(words, "[aeiou]$"))
+words
+sum(str_detect(words, "^j")) #empiezan por j
+mean(str_detect(words, "^[aeiou]")) #que empiezan por vocal
+mean(str_detect(words, "[aeiou]$")) #que terminan por vocal
 
-f1 <- !str_detect(words, "[aeiou]")
-f2 <- str_detect(words, "^[^aeiou]+$")
+f1 <- !str_detect(words, "[aeiou]") # que no tengan vocales
+f2 <- str_detect(words, "^[^aeiou]+$") #lo mismo de arriba
 identical(f1, f2)
 
 words[!str_detect(words, "[aeiou]")]
@@ -161,6 +164,7 @@ str_count("abababababa", "aba")
 str_view("abababababa", "aba")
 str_view_all("abababababa", "aba")
 
+sentences
 head(sentences)
 length(sentences)
 

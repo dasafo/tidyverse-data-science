@@ -12,6 +12,7 @@ df <- tibble::tibble(
 
 df %>% View()
 
+#normalizamos entre 0 y 1
 df$a <- (df$a - min(df$a, na.rm = TRUE))/(max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
 df$b <- (df$b - min(df$b, na.rm = TRUE))/(max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
 df$c <- (df$c - min(df$c, na.rm = TRUE))/(max(df$c, na.rm = TRUE) - min(df$c, na.rm = TRUE))
@@ -239,7 +240,7 @@ avg<-mean(120/12+32,na.rm=TRUE)
 # p : probabilidades
 
 
-wt_mean <- function(x, w, na.rm = TRUE){
+wt_mean <- function(x, w, na.rm = TRUE){ #wt=weight (media ponderada)
   
   stopifnot(is.logical(na.rm), 
             length(na.rm) == 1,
@@ -284,6 +285,8 @@ rule("Sección número 1 ", "Informe del jefe")
 
 sum(c(1,2), na.mr = T)
 list(...)
+
+
 
 my_function <- function(x,y,z) {
   if(length(x) == 0 || length(y) == 0){

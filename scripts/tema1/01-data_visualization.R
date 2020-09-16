@@ -1,11 +1,12 @@
-#Data Visualization - 18 de Septiembre de 2019
+#Data Visualization - 12 de Septiembre de 2020
 library(tidyverse)
 
-#── Attaching packages ───────── tidyverse 1.2.1 ──
-#✔ ggplot2 3.2.1     ✔ purrr   0.3.2
-#✔ tibble  2.1.3     ✔ dplyr   0.8.3
-#✔ tidyr   1.0.0     ✔ stringr 1.4.0
-#✔ readr   1.3.1     ✔ forcats 0.4.0
+#── tidyverse 1.3.0 ──
+#✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+#✓ tibble  3.0.3     ✓ dplyr   1.0.2
+#✓ tidyr   1.1.2     ✓ stringr 1.4.0
+#✓ readr   1.3.1     ✓ forcats 0.5.0
+
 
 #Los coches con motor más grande consumen más combustible que los coches con motor más pequeño.
 #La relación consumo / tamaño es lineal? Es no lineal? Es exponencial?
@@ -32,6 +33,7 @@ ggplot(data = mpg) +
   geom_point(mapping = aes(x =cyl , y = cty))
 
 #PLANTILLA PARA HACER UNA REPRESENTACIÓN GRÁFICA CON GGPLOT
+
 #ggplot(data = <DATA_FRAME>) +
 #  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))
 
@@ -87,7 +89,8 @@ ggplot(data = mpg) +
   geom_point(mapping = aes(x=displ, y = hwy, color = displ<5))
 
 
-##FACETS
+##FACETS (agrupaciones)
+
 # facet_wrap(~<FORMULA_VARIABLE>): la variable debe ser discreta
 ggplot(data = mpg) +
   geom_point(mapping = aes(x = displ, y = hwy)) +
@@ -200,7 +203,7 @@ ggplot(data = diamonds)+
   stat_count(mapping = aes(x=cut))
 
 
-demo_diamonds <- tribble(
+ demo_diamonds <- tribble(
   ~cut,       ~freqs,
   "Fair",       1610,
   "Good",       4906,
@@ -214,7 +217,7 @@ ggplot(data = demo_diamonds) +
            stat = "identity")
 
 ggplot(data = diamonds) + 
-  geom_bar(mapping = aes(x = cut, y = ..prop.., group = 1))
+  geom_bar(mapping = aes(x = cut, y = ..prop.., group = 1)) #nos da la proporcion
 
 ggplot(data = diamonds) + 
   stat_summary(

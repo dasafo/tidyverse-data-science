@@ -1,6 +1,7 @@
 library(tidyverse)
 ?magrittr
 
+#--------------------------------------------------------
 #Little bunny Foo Foo
 #Hopping through the forest
 #Scooping up the field mice
@@ -8,20 +9,21 @@ library(tidyverse)
 
 foo_foo <- little_bunny()
 
-hop()
-scoop()
-bop()
+hop() #saltar
+scoop() #scoop up=recoger
+bop() #golpear
 
 # Variables intermedias
 foo_foo1 <- hop(foo_foo, through = forest)
 foo_foo2 <- scoop(foo_foo1, up = field_mice)
 foo_foo3 <- bop(foo_foo2, on = head)
+#--------------------------------------------------------
 
 dd <- ggplot2::diamonds
 dd1 <- dd %>%
   dplyr::mutate(price_per_carat = price / carat)
 
-install.packages("pryr")
+#install.packages("pryr")
 pryr::object_size(dd)
 pryr::object_size(dd1)
 pryr::object_size(dd,dd1)
@@ -31,6 +33,7 @@ pryr::object_size(dd)
 pryr::object_size(dd1)
 pryr::object_size(dd,dd1)
 
+#-------------------------------------------------
 # Sobreescribir la variable original
 foo_foo <- hop(foo_foo, through = forest)
 foo_foo <- scoop(foo_foo, up = field_mice)
@@ -59,6 +62,7 @@ my_own_pipe <- function(.){
   . <-bop(., on = head)
   return(.)
 }
+#------------------------------------------------
 
 #assign, get, load
 assign("x", 3)
@@ -75,11 +79,14 @@ tryCatch(stop("!"),
 stop("!") %>%
   tryCatch(error = function(e) "Me he encontrado un error")
 
+
 rnorm(1000) %>%
   matrix(ncol = 2) %T>%
   plot() %>%
   str()
 
+ggplot::mtcars
+?mtcars
 mtcars %$%
   cor(disp, mpg)
 

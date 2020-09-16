@@ -14,6 +14,8 @@ table1 %>%
   geom_line(aes(group = country), color = "grey") + 
   geom_point(aes(color = country))
 
+#(El código de esta sección sobre gather y spread ha cambiado 
+#por pivot_long y pivot_wider respectivamente)
 table4a %>%
   gather(`1999`,`2000`, key = "year", value = "cases") -> tidy4a
 
@@ -27,6 +29,9 @@ table2 %>%
   spread(key = type, value = count)
 
 #Ejercicio 4
+#Las funciones spread y gather no son absolutamente simétricas. 
+#Toma el siguiente ejemplo para explicarlo correctamente:
+
 roi <- tibble(
   year = c(rep(2016,4), rep(2017,4), 2018),
   quarter = c(rep(c(1,2,3,4),2),1),
@@ -47,6 +52,9 @@ roi %>%
 # coerced to character before type conversion.
 
 #Ejercicio 7
+#Explica porqué falla la función spread aplicada a la siguiente tribble de abajo.
+#¿Crees que añadiendo alguna nueva columna se soluciona el problema? Di cual.
+
 people <- tribble(
   ~name,         ~key,   ~value,
   #-------------|-------|-------
@@ -59,6 +67,10 @@ people <- tribble(
 )
 
 #Ejercicio 8
+#Limpia la siguiente tribble con la función de spread o gather que 
+#creas más útil. Indica cuales son las nuevas variables después de 
+#aplicar la función.
+
 pregnancy <- tribble(
   ~pregnant, ~male, ~female,
   #--------|------|---------
@@ -71,6 +83,7 @@ pregnancy %>%
   mutate(pregnant = (pregnant == "yes"),
          female = (sex == "female")) %>%
   select(-sex)
+
 
 
 
@@ -120,12 +133,36 @@ treatments <- tribble(
 treatments %>%
   fill(name)
 
+## Ejemplo de tuberculosis de bbdd de la WHO
 
+# 1-Limpieza Paso a paso
+view(tidyr::who)
+tidyr::who %>%
+  gather(new_sp_m014:newrel_f65, key = "key", value = "cases", na.rm = TRUE) ->who1
+who1 %>% count(key) %>% View()
 
+who2 <- who1 %>%  
+  mutate(key = stringr::str_replace(key, "newrel", "new_rel"))
+who2 %>% count(key) %>% View()
+
+who3 <- who2 %>%
+ separate(key, c("new", "type", "sexage"), sep = "_")
+who3 %>% View()
+
+who4 <- who3 %>%
+ select(-new, -iso2, -iso3)
+who4 %>% View()
+
+who5 <- who4 %>%
+  separate(sexage, c("sex", "age"), sep = 1)
+who5 %>% View()
+
+# 2- Limpieza en un solo pipe
+
+view(tidyr::who)
 tidyr::who %>%
   gather(new_sp_m014:newrel_f65, key = "key", value = "cases", na.rm = TRUE) %>%
   mutate(key = stringr::str_replace(key, "newrel", "new_rel")) %>%
   separate(key, c("new", "type", "sexage"), sep = "_") %>%
   select(-new, -iso2, -iso3) %>%
   separate(sexage, c("sex", "age"), sep = 1)
-

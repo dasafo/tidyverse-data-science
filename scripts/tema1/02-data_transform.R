@@ -78,7 +78,7 @@ age.mery <- NA
 #El tío John también hace mucho que no lo veo, y no se cuantos años debe tener...
 age.john <- NA
 #¿Deben de tener la misma edad John y Mery?
-age.mery == age.john
+age.mery == age.john  
 
 is.na(age.mery)
 
@@ -119,7 +119,7 @@ head(flights, 10)
 
 tail(flights, 10)
 
-### ARRANGE
+### ARRANGE (ordenar)
 sorted_date <- arrange(flights, year, month, day)
 flights %>% arrange(year, month, day)
 tail(flights)
@@ -129,7 +129,7 @@ head(arrange(flights, desc(arr_delay)))
 
 arrange(flights, desc(dep_delay))
 
-arrange(df, x)
+arrange(df, x) #los NA se van al final de la ordenacion
 arrange(df, desc(x))
 
 View(arrange(flights, carrier))
@@ -166,42 +166,66 @@ rename(flights, deptime = dep_time,
 
 select(flights, deptime = dep_time)
 
-select(flights, time_hour, distance, air_time, everything())
+select(flights, time_hour, distance, air_time, everything()) #everything para que me ponga el resto después
 
 
 sorted_date
 
 
 
-
 #Ejercicio 1
+#Piensa cómo podrías usar la función arrange() para colocar todos 
+#los valores NA al inicio. Pisa: puedes la función is.na() en lugar de 
+#la función desc() como argumento de arrange.
+
 arrange(flights,!is.na(dep_time))
 
 #Ejercicio 2
+#Ordena los vuelos de flights para encontrar los vuelos más retrasados 
+#en la salida. ¿Qué vuelos fueron los que salieron los primeros antes 
+#de lo previsto?
+
 arrange(flights, desc(dep_delay))[1,]
 arrange(flights, dep_delay)[1,]
 
 #Ejercicio 3
+#Ordena los vuelos de flights para encontrar los vuelos más rápidos. 
+#Usa el concepto de rapidez que consideres. 
+
 View(arrange(flights, desc(distance/air_time)))
 
 #Ejercicio 4 y 5
+#-¿Qué vuelos tienen los trayectos más largos? Busca en Wikipedia qué 
+# dos aeropuertos del dataset alojan los vuelos más largos. 
+#-¿Qué vuelos tienen los trayectos más cortos? Busca en Wikipedia qué 
+# dos aeropuertos del dataset alojan los vuelos más largos. 
+
 View(arrange(flights, desc(distance))[1,])
 View(arrange(flights, distance)[1,])
 
 #Ejercicio 6
+#Dale al coco para pensar cuantas más maneras posibles de seleccionar los 
+#campos dep_time, dep_delay, arr_time y arr_delay del dataset de flights. 
+
 select(flights,dep_time, dep_delay, arr_time, arr_delay)
 select(flights,starts_with("dep"), starts_with("arr"))
 select(flights,ends_with("time"), ends_with("delay") -starts_with("sched"),-starts_with("air") )
 
 #Ejercicio 7
+#¿Qué ocurre si pones el nombre de una misma variable varias veces en una 
+#select()?
+
 select(flights, distance, distance)
 
-
 #Ejercicio 8 y 9
+# -Investiga el uso de la función one_of() de dplyr. 
+# -Investiga cómo puede ser útil la función one_of() de la pregunta 
+# anterior en conjunción con el vector de variables 
+# c("year", "month", "day", "dep_delay", "arr_delay")
+
 select(flights, one_of(c("year", "month", "day", "dep_delay", "arr_delay")))
 
 select(flights, contains("TIME"))
-
 
 
 ### MUTATE
@@ -236,9 +260,9 @@ transmute(flights_new,
           time_gain_per_hour = time_gain / air_time_hour) -> data_from_flights
 
 # * Operaciones aritméticas: +, -, *, /, ^  (hours + 60 * minutes)
-# * Agregados de funciones: x/sum(x) : proporición sobre el total
+# * Agregados de funciones: x/sum(x) : proporción sobre el total
 #                           x - mean(x): distancia respecto de media
-#                           (x - mean(x))/sd(x): tipificación
+#                           (x - mean(x))/sd(x): tipificación-standarizacion
 #                           (x - min(x))/(max(x) - min(x)): estandarizar entre [0,1]
 # * Aritmética modular: %/%-> cociente de la división entera, %% -> resto de la división entera
 #                       x == y * (x%/%y) + (x%%y) 
@@ -289,6 +313,12 @@ transmute(flights,
 
 
 #Ejercicio 1
+#El dataset de vuelos tiene dos variables, dep_time y sched_dep_time muy 
+#útiles pero difíciles de usar por cómo vienen dadas al no ser variables contínuas. 
+#Fíjate que cuando pone 559, se refiere a que el vuelo salió a las 5:59... 
+#Convierte este dato en otro más útil que represente el número de minutos que horas 
+#desde media noche. 
+
 transmute(flights, 
           dep_time, sched_dep_time,
           new_dep_time = 60*dep_time %/% 100 + dep_time %% 100 , 
@@ -296,6 +326,11 @@ transmute(flights,
           )
 
 #Ejercicio 2
+#Compara las variables air_time contra arr_time - dep_time. 
+# -¿Qué esperas ver?
+# -¿Qué ves realmente?
+# -¿Se te ocurre algo para mejorarlo y corregirlo?
+
 transmute(flights,
           air_time, 
           new_dep_time = 60*dep_time %/% 100 + dep_time %% 100 , 
@@ -304,6 +339,10 @@ transmute(flights,
 
 
 #Ejercicio 3
+#Compara los valores de dep_time, sched_dep_time y dep_delay. Cómo deberían 
+#relacionarse estos tres números? Compruébalo y haz las correcciones numéricas 
+#que necesitas.
+
 transmute(flights,
           new_dep_time = 60*dep_time %/% 100 + dep_time %% 100 , 
           new_sched_dep_time = 60*sched_dep_time %/% 100 + sched_dep_time %% 100,
@@ -312,6 +351,9 @@ transmute(flights,
           new_delay==dep_delay)
 
 #Ejercicio 4
+#Usa una de las funciones de ranking para quedarte con los 10 vuelos más retrasados 
+#de todos. 
+
 arrange(mutate(flights,
           r_delay = min_rank(dep_delay)),
          r_delay

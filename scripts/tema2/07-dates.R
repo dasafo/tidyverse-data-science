@@ -137,7 +137,7 @@ flights_dt %>%
 
 #duración -> número exacto de segundos
 
-jb_age <- today() - ymd(19880519)
+jb_age <- today() - ymd(19850514)
 jb_age
 
 class(jb_age)

@@ -1,7 +1,13 @@
 library(tidyverse)
 library(nycflights13)
 
+## (Ver esquema relacional(.png) de nycflights13 en la carpeta de este archivo)
+
 nycflights13::airlines
+
+?nycflights13
+?flights
+
 airports
 planes
 weather
@@ -9,15 +15,17 @@ colnames(flights)
 
 View(flights)
 
+#Comprobamos que la Primary Key de planes es tailnum
 planes %>%
   count(tailnum) %>%
   filter(n>1)
 
+#Comprobamos que las Primary Keys de weather es tailnum
 weather %>%
   count(year, month, day, hour, origin) %>%
   filter(n>1)
 
-
+#Comprobamos que n
 flights %>%
   count(year, month, day, hour,flight) %>%
   filter(n>1)
@@ -26,13 +34,14 @@ flights %>%
   count(year, month, day, hour,tailnum) %>%
   filter(n>1)
 
+## Intersecciones de tablas
 
 flights_new <- flights %>%
   select(year:day, hour, origin, dest, tailnum, carrier)
 
 flights_new %>% 
   left_join(airlines, by = "carrier")
-
+#(es lo mismo de arriba)
 flights_new %>%
   mutate(name = airlines$name[match(carrier, airlines$carrier)])
 
@@ -129,12 +138,10 @@ flights_new %>% left_join(airports, by = c("origin" = "faa"))
 flights %>%
   count(dest, sort = TRUE) %>%
   head(10) -> top_dest
-
 flights %>%
   filter(dest %in% top_dest$dest)
 
 flights %>% semi_join(top_dest)
-
 flights %>% anti_join(planes, by = "tailnum") %>%
   count(tailnum, sort = TRUE)
 

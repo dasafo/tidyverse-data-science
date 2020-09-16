@@ -97,10 +97,24 @@ dplyr::select()
 
 
 # Ejercicio 1
+#¿Tibble o no tibble? ¿Cómo sabes si un objeto es una tibble o no?
+#Pista: imprime los objetos mtcars por un lado y nycflights13::flights 
+#que son respectivamente un data.frame y una tibble.
+
 mtcars
 nycflights13::flights 
 
 # Ejercicio 2
+#Compara y contrasta las siguientes operaciones en el data frame y 
+#su equivalente en tibble. 
+# df <- data.frame(abc = 1, xyz = "a")
+# df$x
+# df[,"xyz"]
+# df[,c("abc","xyz")]
+#¿En qué se parecen? 
+#¿En qué difieren? 
+#¿Por qué a veces el data frame por defecto nos puede causar mucha frustración?
+
 df <- data.frame(abc = 1, xyz = "a")
 df$x
 df[,"xyz"]
@@ -112,11 +126,26 @@ df2[,"xyz"]
 df2[,c("abc","xyz")]
 
 # Ejercicio 3
+#Si tenemos el nombre de una variable almacenada en un objeto tipo 
+#string (por ejemplo myvar <- "mpg"), ¿cómo podemos extraer la variable 
+#referenciada de una tibble? ¿Y en un data frame?
+  
 var <- "mpg"
 mtcars[,var]
 as_tibble(mtcars)[[var]]
 
 #Ejercicio 4 
+#Toma la siguiente tibble formada por variables con nombres no sintácticos.
+# df <- tibble(
+#  `1` = 1:12,
+#  `2` = `1` * 2 + `1`*runif(length(`1`))
+# )
+#Extrae el valor de la variable `1`
+#Haz un scatterplot de la variable `1`contra la variable `2`
+#Crea una nueva columna llamada `3`que sea el cociente de `2`entre `1`.
+#Renombra las columnas para que se llamen x, y, z respectivamente.
+#¿Qué nombre crees que es mejor?
+
 df <- tibble(
   `1` = 1:12,
   `2` = `1` * 2 + `1`*runif(length(`1`))
@@ -136,10 +165,16 @@ df %>%
 
 
 #Ejercicio 5
+#Investiga acerca de la función tibble:enframe() y tibble:deframe(). 
+#¿Qué hace y para qué puede servirte?
+
 enframe(1:10)
 deframe(enframe(1:10))
 enframe(c(x = 3, y = 5))
 
 #Ejercicio 6
+#¿Cómo podemos controlar cuantos nombres de columna adicionales se 
+#imprimen en el footer de una tibble?
+
 ?print.tbl_df
 

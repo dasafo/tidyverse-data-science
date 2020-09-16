@@ -17,10 +17,10 @@ y2 <- parse_factor(x2, levels = day_levels)
 factor(x1)
 
 f1 <- factor(x1, levels = unique(x1))
-
 f2 <- x1 %>% factor() %>% fct_inorder()
-
 levels(f2)
+
+
 
 gss_cat %>% View()
 
